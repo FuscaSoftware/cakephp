@@ -7,12 +7,13 @@
  * PHP 5
  *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
  * @package       Cake.Test.Case.Controller
  * @since         CakePHP(tm) v 1.2.3
@@ -249,4 +250,17 @@ class ControllerMergeVarsTest extends CakeTestCase {
 
 		$this->assertFalse(isset($Controller->Session));
 	}
+
+/**
+ * Ensure that $modelClass is correct even when Controller::$uses
+ * has been iterated, eg: by a Component, or event handlers.
+ */
+	public function testMergeVarsModelClass() {
+		$Controller = new MergeVariablescontroller();
+		$Controller->uses = array('Test', 'TestAlias');
+		$lastModel = end($Controller->uses);
+		$Controller->constructClasses();
+		$this->assertEquals($Controller->uses[0], $Controller->modelClass);
+	}
+
 }
